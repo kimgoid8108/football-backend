@@ -7,7 +7,6 @@ async function bootstrap() {
 
   const allowedOrigins = [
     'http://localhost:3000',
-    'http://localhost:3001',
     'https://football-frontend.vercel.app', // Vercel 주소
   ];
 
