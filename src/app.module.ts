@@ -8,10 +8,17 @@ import { Squad } from './squad/entities/squad.entity';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'better-sqlite3',
-      database: 'squad.db',
+      type: 'postgres',
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      username: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
       entities: [Squad],
-      synchronize: true, // 개발 환경에서만 사용
+      synchronize: true,
+      ssl: {
+        rejectUnauthorized: false,
+      },
     }),
     SquadModule,
   ],

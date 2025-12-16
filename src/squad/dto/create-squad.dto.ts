@@ -1,7 +1,8 @@
-import { IsString, IsArray, IsNotEmpty, ValidateNested } from 'class-validator';
+import { IsString, IsArray, IsNotEmpty, ValidateNested, IsNumber, IsOptional, IsBoolean } from 'class-validator';
 import { Type } from 'class-transformer';
 
 class PlayerDto {
+  @IsNumber()
   @IsNotEmpty()
   id: number;
 
@@ -13,12 +14,16 @@ class PlayerDto {
   @IsNotEmpty()
   position: string;
 
+  @IsNumber()
   @IsNotEmpty()
   x: number;
 
+  @IsNumber()
   @IsNotEmpty()
   y: number;
 
+  @IsOptional()
+  @IsBoolean()
   isBench?: boolean;
 }
 
