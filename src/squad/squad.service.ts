@@ -47,4 +47,3 @@ export class SquadService {
     await this.squadRepository.remove(squad);
   }
 }
-
