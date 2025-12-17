@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 // 선수 정보 인터페이스
 export interface PlayerData {
@@ -24,10 +30,12 @@ export class Squad {
   @Column('simple-json')
   players: PlayerData[];
 
+  @Column({ nullable: true })
+  gameType: string;
+
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
 }
-

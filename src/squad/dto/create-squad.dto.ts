@@ -1,4 +1,13 @@
-import { IsString, IsArray, IsNotEmpty, ValidateNested, IsNumber, IsOptional, IsBoolean } from 'class-validator';
+import {
+  IsString,
+  IsArray,
+  IsNotEmpty,
+  ValidateNested,
+  IsNumber,
+  IsOptional,
+  IsBoolean,
+  IsIn,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 class PlayerDto {
@@ -40,5 +49,9 @@ export class CreateSquadDto {
   @ValidateNested({ each: true })
   @Type(() => PlayerDto)
   players: PlayerDto[];
-}
 
+  @IsOptional()
+  @IsString()
+  @IsIn(['football', 'futsal'])
+  gameType?: string;
+}
