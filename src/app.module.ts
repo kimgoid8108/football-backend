@@ -19,6 +19,9 @@ import { Squad } from './squad/entities/squad.entity';
 
         // PostgreSQL 설정
         if (dbType === 'postgres') {
+          const isProduction = configService.get<string>('NODE_ENV') === 'production';
+          const dbSsl = configService.get<string>('DB_SSL');
+          
           return {
             type: 'postgres',
             host: configService.get<string>('DB_HOST', 'localhost'),
@@ -27,13 +30,17 @@ import { Squad } from './squad/entities/squad.entity';
             password: configService.get<string>('DB_PASSWORD'),
             database: configService.get<string>('DB_NAME'),
             entities: [Squad],
-            synchronize: configService.get<string>('NODE_ENV') !== 'production',
-            ssl:
-              configService.get<string>('DB_SSL') === 'true'
-                ? {
-                    rejectUnauthorized: false,
-                  }
-                : false,
+            synchronize: !isProduction, // 프로덕션에서는 false
+            ssl: dbSsl === 'true' || (isProduction && dbSsl !== 'false')
+              ? {
+                  rejectUnauthorized: false,
+                }
+              : false,
+            extra: {
+              // 연결 풀 설정
+              max: 10,
+              idleTimeoutMillis: 30000,
+            },
           };
         }
 
