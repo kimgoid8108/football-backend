@@ -6,7 +6,14 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  getHello() {
+    return {
+      message: 'Football Squad Builder API',
+      version: '1.0.0',
+      endpoints: {
+        auth: '/api/auth',
+        squads: '/api/squads',
+      },
+    };
   }
 }
