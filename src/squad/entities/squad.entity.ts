@@ -36,7 +36,7 @@ export class Squad {
   @Column({ nullable: true })
   gameType: string;
 
-  @Column()
+  @Column({ nullable: true })
   userId: number;
 
   @ManyToOne(() => User, (user) => user.squads)

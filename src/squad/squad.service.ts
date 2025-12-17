@@ -15,6 +15,7 @@ export class SquadService {
   // 스쿼드 생성
   async create(createSquadDto: CreateSquadDto, userId: number): Promise<Squad> {
     console.log('스쿼드 생성 요청:', JSON.stringify(createSquadDto, null, 2));
+    console.log('사용자 ID:', userId);
     console.log(
       '선수 데이터 확인:',
       createSquadDto.players?.map((p) => ({
@@ -38,7 +39,7 @@ export class SquadService {
     try {
       console.log('스쿼드 목록 조회 시작 (userId:', userId, ')');
       const result = await this.squadRepository.find({
-        where: { userId },
+        where: { userId: userId },
         order: { updatedAt: 'DESC' },
       });
       console.log(`스쿼드 목록 조회 성공: ${result.length}개`);
