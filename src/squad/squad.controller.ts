@@ -24,8 +24,13 @@ export class SquadController {
 
   // 모든 스쿼드 조회
   @Get()
-  findAll() {
-    return this.squadService.findAll();
+  async findAll() {
+    try {
+      return await this.squadService.findAll();
+    } catch (error) {
+      console.error('스쿼드 목록 조회 컨트롤러 에러:', error);
+      throw error;
+    }
   }
 
   // 특정 스쿼드 조회
@@ -49,4 +54,3 @@ export class SquadController {
     return this.squadService.remove(id);
   }
 }
-
