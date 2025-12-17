@@ -20,9 +20,14 @@ export class SquadService {
 
   // 모든 스쿼드 조회
   async findAll(): Promise<Squad[]> {
-    return await this.squadRepository.find({
-      order: { updatedAt: 'DESC' },
-    });
+    try {
+      return await this.squadRepository.find({
+        order: { updatedAt: 'DESC' },
+      });
+    } catch (error) {
+      console.error('스쿼드 목록 조회 실패:', error);
+      throw error;
+    }
   }
 
   // 특정 스쿼드 조회
