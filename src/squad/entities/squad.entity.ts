@@ -4,7 +4,10 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
+import { User } from '../../user/entities/user.entity';
 
 // 선수 정보 인터페이스
 export interface PlayerData {
@@ -32,6 +35,13 @@ export class Squad {
 
   @Column({ nullable: true })
   gameType: string;
+
+  @Column()
+  userId: number;
+
+  @ManyToOne(() => User, (user) => user.squads)
+  @JoinColumn({ name: 'userId' })
+  user: User;
 
   @CreateDateColumn()
   createdAt: Date;

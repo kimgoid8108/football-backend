@@ -4,7 +4,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SquadModule } from './squad/squad.module';
+import { AuthModule } from './auth/auth.module';
 import { Squad } from './squad/entities/squad.entity';
+import { User } from './user/entities/user.entity';
 
 @Module({
   imports: [
@@ -30,7 +32,7 @@ import { Squad } from './squad/entities/squad.entity';
             username: configService.get<string>('DB_USER'),
             password: configService.get<string>('DB_PASSWORD'),
             database: configService.get<string>('DB_NAME'),
-            entities: [Squad],
+            entities: [Squad, User],
             synchronize: true, // 테이블 자동 생성 (개발 단계)
             ssl:
               dbSsl === 'true' || (isProduction && dbSsl !== 'false')
@@ -50,13 +52,14 @@ import { Squad } from './squad/entities/squad.entity';
         return {
           type: 'better-sqlite3',
           database: configService.get<string>('DB_DATABASE', 'squad.db'),
-          entities: [Squad],
+          entities: [Squad, User],
           synchronize: true, // 개발 환경에서만 사용
         };
       },
       inject: [ConfigService],
     }),
     SquadModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

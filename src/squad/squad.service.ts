@@ -13,7 +13,7 @@ export class SquadService {
   ) {}
 
   // 스쿼드 생성
-  async create(createSquadDto: CreateSquadDto): Promise<Squad> {
+  async create(createSquadDto: CreateSquadDto, userId: number): Promise<Squad> {
     console.log('스쿼드 생성 요청:', JSON.stringify(createSquadDto, null, 2));
     console.log(
       '선수 데이터 확인:',
@@ -23,18 +23,22 @@ export class SquadService {
         position: p.position,
       })),
     );
-    const squad = this.squadRepository.create(createSquadDto);
+    const squad = this.squadRepository.create({
+      ...createSquadDto,
+      userId,
+    });
     console.log('생성된 스쿼드:', JSON.stringify(squad, null, 2));
     const saved = await this.squadRepository.save(squad);
     console.log('저장된 스쿼드:', JSON.stringify(saved, null, 2));
     return saved;
   }
 
-  // 모든 스쿼드 조회
-  async findAll(): Promise<Squad[]> {
+  // 모든 스쿼드 조회 (사용자별)
+  async findAll(userId: number): Promise<Squad[]> {
     try {
-      console.log('스쿼드 목록 조회 시작');
+      console.log('스쿼드 목록 조회 시작 (userId:', userId, ')');
       const result = await this.squadRepository.find({
+        where: { userId },
         order: { updatedAt: 'DESC' },
       });
       console.log(`스쿼드 목록 조회 성공: ${result.length}개`);
@@ -62,8 +66,10 @@ export class SquadService {
   }
 
   // 특정 스쿼드 조회
-  async findOne(id: number): Promise<Squad> {
-    const squad = await this.squadRepository.findOne({ where: { id } });
+  async findOne(id: number, userId: number): Promise<Squad> {
+    const squad = await this.squadRepository.findOne({
+      where: { id, userId },
+    });
     if (!squad) {
       throw new NotFoundException(`스쿼드를 찾을 수 없습니다. (ID: ${id})`);
     }
@@ -73,15 +79,19 @@ export class SquadService {
   }
 
   // 스쿼드 수정
-  async update(id: number, updateSquadDto: UpdateSquadDto): Promise<Squad> {
-    const squad = await this.findOne(id);
+  async update(
+    id: number,
+    updateSquadDto: UpdateSquadDto,
+    userId: number,
+  ): Promise<Squad> {
+    const squad = await this.findOne(id, userId);
     Object.assign(squad, updateSquadDto);
     return await this.squadRepository.save(squad);
   }
 
   // 스쿼드 삭제
-  async remove(id: number): Promise<void> {
-    const squad = await this.findOne(id);
+  async remove(id: number, userId: number): Promise<void> {
+    const squad = await this.findOne(id, userId);
     await this.squadRepository.remove(squad);
   }
 }
