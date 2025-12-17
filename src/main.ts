@@ -49,6 +49,19 @@ async function bootstrap() {
 
   app.useGlobalFilters(new HttpExceptionFilter());
 
+  // Render 헬스체크용 루트 경로 처리 (global prefix 적용 전)
+  const expressApp = app.getHttpAdapter().getInstance();
+  expressApp.get('/', (req, res) => {
+    res.json({
+      status: 'ok',
+      message: 'Football Squad Builder API',
+      version: '1.0.0',
+    });
+  });
+  expressApp.head('/', (req, res) => {
+    res.status(200).end();
+  });
+
   app.setGlobalPrefix('api');
 
   const port = process.env.PORT || 3001;
